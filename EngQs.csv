@@ -1,0 +1,93 @@
+ColumnNo,Qual Q Number,Item
+1,Data,QualtricsData
+2,Data,QualtricsData
+3,Data,QualtricsData
+4,Data,QualtricsData
+5,Data,Duration
+6,Data,QualtricsData
+7,Data,QualtricsData
+8,Data,QualtricsData
+9,Data,QualtricsData
+10,Data,QualtricsData
+11,Consent,Consent
+12,YearOfStudy,Level
+13,Language,Language
+14,Ethnicity,Ethnicity
+15,Ethnicity_5_TEXT,Ethnicity text
+16,Gender,Gender
+17,Disabilities,Disabilities
+18,TravelTime,Travel_Time
+19,Caring,Caring
+20,InternationalStudent,International
+21,MatureStudent,Mature
+22,Q12,Spending a lot of time on university work 
+23,Q12,Attending my scheduled lectures 
+24,Q12,Attending my scheduled tutorials or workshops 
+25,Q12,Asking questions in classes or participating in class discussions 
+26,Q12,"Regularly using online learning resources, such as Blackboard "
+27,Q12,Regularly checking my university emails 
+28,Q12,Keeping on top of university work 
+29,Q12,Being involved in decisions affecting my course 
+30,Q13,"Using campus based learning facilities, such as the libraries "
+31,Q13,Studying alongside other students 
+32,Q13,Participating in learning activities during classes 
+33,Q13,Keeping in touch with friends from my course 
+34,Q13,Spending time with other students in social settings 
+35,Q13,Feeling that academic staff take an interest in my progress 
+36,Q13,Being given helpful feedback on my work or progress 
+37,Q13,Being able to talk 1-1 with academic staff 
+38,Q14,Being involved in decisions affecting my department or university
+39,Q14,Being able to understand the course content
+40,Q14,Obtaining good grades
+41,Q14,Enjoying the intellectual challenge of my course
+42,Q14,Getting satisfaction from my studies
+43,Q14,Feeling motivated to do my university work
+44,Q14,Feeling supported
+45,Q14,Feeling that I am part of the university community
+46,Q14,Being able to give feedback on my course
+47,Q16,How would you describe your overall in-person attendance for all types of timetabled teaching session?
+48,Q17,Lectures
+49,Q17,Workshops
+50,Q17,Tutorials
+51,Q18,"Thinking about lectures, approximately how many did you watch (at any point in time) as a recording in Encore?"
+52,Q19,Our lectures are live streamed through Encore. Approximately how many did you watch live through Encore?
+53,Q20,What were your main reason(s) for watching Encore recordings of the lectures? Please select all that apply.
+54,Q20_4_TEXT,Text on reasons for watching Encore recordings
+55,Q21,When did you usually engage with the lectures themselves? Please select all that apply.
+56,Q22,How do you feel about your level of in-person attendance (for all types of teaching session) over the last year?
+57,Q22_4_TEXT,Text on how feel about in-person attendance
+58,Q23,"During a typical week in term time, how many hours did you spend in paid employment?"
+59,Q24,"During a typical week in term time, how many hours did you spend on extracurricular activities (e.g., clubs, societies, sports teams, volunteering)?"
+60,Q27,I don't need to attend lectures in-person because they are recorded
+61,Q27,I need to attend tutorials/workshops in-person because they are not recorded
+62,Q27,I understand why in-person attendance is beneficial
+63,Q27,It is clear how attending in-person can help me in future assessments/exams
+64,Q27,It is clear how attending in-person can help me to develop non-academic or professional skills
+65,Q27,In-person sessions sometimes clash with my paid work or volunteering commitments
+66,Q28,I struggle to afford the travel costs of in-person attendance
+67,Q28,Other activities or commitments make in-person attendance difficult
+68,Q28,Caring commitments make in-person attendance difficult
+69,Q28,The lecture content or learning activities are engaging
+70,Q28,I am more likely to attend lectures in-person when they are earlier in the day
+71,Q28,I am more likely to attend lectures in-person when they are later in the day
+72,Q29,The quality of teaching sessions are not good enough for me to attend in-person
+73,Q29,The pace of in-person lectures is too fast for me
+74,Q29,The pace of in-person lectures is too slow for me
+75,Q29,"I prefer to study on my own, or in my own time"
+76,Q29,I enjoy it when there is peer interaction or discussion during teaching sessions
+77,Q30,The timetabling of classes can make it problematic for me to attend in-person
+78,Q30,I am able to get more feedback and check my understanding better during in-person sessions
+79,Q30,Spreading in-person teaching sessions out across more days of the week would be helpful
+80,Q30,Concentrating in-person teaching sessions into fewer days across the week would be helpful
+81,Q30,I would be more likely to attend in-person if lecture slides were released more in advance
+82,Q31,I don't feel prepared enough to attend in-person teaching sessions
+83,Q31,Health related issues (including mental health) make in-person attendance difficult for me
+84,Q31,Issues with buildings or teaching spaces make me less likely to attend in-person sessions
+85,Q31,I am more likely attend in-person sessions when I know my attendance is being monitored
+86,Q32,"Looking ahead to the next academic year, what is most likely to help you to attend teaching sessions in-person?"
+87,Q32,"Looking ahead to the next academic year, what is most likely to help you to attend teaching sessions in-person?"
+88,Q32,"Looking ahead to the next academic year, what is most likely to help you to attend teaching sessions in-person?"
+89,Q33,"Finally, looking ahead to the next academic year, what is most likely to prevent you from attending teaching sessions in-person?"
+90,Q33,"Finally, looking ahead to the next academic year, what is most likely to prevent you from attending teaching sessions in-person?"
+91,Q33,"Finally, looking ahead to the next academic year, what is most likely to prevent you from attending teaching sessions in-person?"
+92,ID,ID
