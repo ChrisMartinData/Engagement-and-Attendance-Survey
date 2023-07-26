@@ -1,0 +1,262 @@
+---
+title: "Engagement and Attendance Survey Report"
+author: "Chris Martin"
+date: "`r Sys.Date()`"
+output:
+  html_document: default
+  code_folding: hide
+---
+
+
+# Engagement and Attendance Survey Report
+
+Department of Psychology, University of Sheffield, July 2023
+
+In June and July 2023 we carried out a survey of students enrolled on our undergraduate BSc Psychology programme to try to better understand student perceptions of course engagement and attendance. Approval for the research was provided by the Ethics Committee of the University of Sheffield.
+
+This is a report on the results of that survey, produced using R Markdown.
+
+:::: {.info}
+This report contains preliminary analysis only. A full write up is in progress and we plan to submit the work for publication.
+::::
+
+## Prepare environment and load data
+
+Make the the qualtRics, likert and tidyverse libraries available and then load the data.
+Data is combined across the Level 1 and Level 22 surveys into a single data frame.
+```{r, echo = FALSE, message = FALSE}
+library('qualtRics')
+library('likert')
+library('tidyverse')
+
+L1data <- data.frame(read_survey("Psychology Student Engagement Survey 2023_20 July 2023_10.51.csv")) #load Level 1 data
+L2data <- data.frame(read_survey("Level 2 Psychology Student Engagement Survey 2023_20 July 2023_15.30.csv")) #load Level 1 data
+EngQs <- read.csv2("EngQs.csv", sep = ",") #load column names
+Data <- rbind(L1data, L2data) #combine data
+```
+
+## Screen and clean data
+
+Order data by Qualtrics 'progress' measure and inspect rows (rows 20-26 reveal relevant cut-off point, as below).
+
+```{r}
+Data <- arrange(Data, Progress)
+y<-data.frame(lapply(Data[c(20:26),c(70:80)], substr, 1, 3))
+y
+```
+
+Up to and including row 22, there are missing values. Therefore, remove first 22 rows. Then apply longer column names to facilitate Likert data visualisation later.
+
+```{r}
+DataComplete <- Data[c(23:162),]
+colnames(Data)[c(5, 12:92)]<-EngQs[c(5, 12:92),3]
+```
+
+Next, show duration data (how long it took respondents to complete the survey).
+
+```{r}
+
+ggplot(DataComplete, aes(x = "", y = DataComplete$Duration/3600))+
+  geom_boxplot(outlier.shape = NA)+
+geom_jitter()+
+  scale_x_discrete()+
+  ylab("Time to complete survey (hrs)")+xlab("All Respondents")
+```
+
+Two entries with very long duration: inspection of responses indicates they are complete and fine to include.
+
+
+
+
+
+
+
+
+## First a header
+
+Aka "header material". It looks like this, at the top of the file:
+
+![Yaml matter at the top of a .Rmd file](images/yaml.png)
+
+This is called YAML and it is stuff meant to be read by the computer when the file is converted into a document to be read by humans. You can see that this is meant to be an "HTML" document (that's the kind on a webpage), so let's make it now. Click "knit" in RStudio (or "knit to HTML" if you are exploring the options menu).
+
+(you'll be prompted to give your ``.Rmd`` file a name first, if you haven't done this already).
+
+After a brief pause you should get a new window open, containing something that has some of the same words as your document. Notice how the YAML stuff has disappeared, and the new document now contains formatting (bold, italics, headings, etc).
+
+Part of the benefit of markdown is that you write the document once, and can convert it to a webpage, or a PDF, or a MS Word document. Try now. Click "Knit" and select "Knit to PDF". You get a nice PDF document, looking almost, but not entirely, like the webspage you made moments before. 
+
+
+## Second, text
+
+If you just write stuff in a ``.Rmd`` document you get text. This is the second kind of thing in a ``.Rmd`` document, like this.
+
+It can contain formatting - *italics*, **bold**, etc - as well as stuff like lists and hyperlinks:
+
+* See a long list of formatting options in this [cheatsheet](https://rstudio.com/wp-content/uploads/2015/02/rmarkdown-cheatsheet.pdf)
+* The most common options here: [Markdown Basics](https://rmarkdown.rstudio.com/authoring_basics.html)
+* This line just to demonstrate that this is a list
+
+But the real strength of Rmarkdown is you can mix text and code
+
+## Third, code
+
+This is the third ingredient, code and any output it produces. Like this:
+
+```{r}
+
+print("Here is some R code")
+a <- 6
+b <- 2.3
+print(a/b)
+print("And the output it produces")
+```
+
+Here is another example
+
+
+```{r asrsscatter, warning=FALSE}
+#Code to make an example graph
+library(tidyverse)
+
+#load some data
+
+#Methdod 1. Load from Tom's computer
+#filename <- '/home/tom/Desktop/psy6422/mydatafile.csv'
+#df <- read.csv(filename)
+
+#Method 2. Load from URL https://rpubs.com/lokraj/github_csv
+library (readr)
+urlfile="https://raw.githubusercontent.com/tomstafford/psy6422/master/mydatafile.csv"
+df <- read_csv(url(urlfile))
+
+
+#rename columns for easy labelling
+df <- df %>% rename(ppt = "Participant Number",asrs = "Total ASRS Score")
+
+#plot parameters
+plottitle  <-  'ASRS values for each participant'
+xlab  <-  'Participant number'
+ylab  <-  'Total ASRS score'
+pointsize  <-  7
+
+#make plot
+p1 <- ggplot(data=df,aes(x=ppt,y=asrs))
+p1 + geom_point(size=pointsize) +
+  ggtitle(plottitle) +
+  xlab(xlab) +
+  ylab(ylab)
+
+
+```
+
+You don't need to show the r code, but can still include it in the document and use it to generate figures etc. 
+
+The scatterplot above uses participant number as one of the axes, which doesn't really make any sense. A histogram is a better way of visualising the spread of scores on a single variable, so here is one:
+
+```{r examplehistogram, echo=FALSE}
+#Code to make a better example graph
+# - note we don't need to load the data again etc
+# here's a useful page about making histograms http://www.sthda.com/english/wiki/ggplot2-histogram-plot-quick-start-guide-r-software-and-data-visualization
+
+#plot parameters
+binwidth <- 6
+plottitle  <-  'Distribution of ASRS values over sample'
+xlab  <-  paste('Total ASRS score ( binwidth = ',binwidth,')')
+ylab  <-  'Frequency'
+#pointsize  <-  7
+
+#make plot
+p1 <- ggplot(data=df,aes(x=asrs))
+p1 + geom_histogram(binwidth=binwidth,alpha=0.5) +
+  ggtitle(plottitle) +
+  xlab(xlab) +
+  ylab(ylab)
+
+```
+
+The code to make this plot is contained in the same ``.Rmd`` file as this text, but I've hidden it so only the output is shown. To do this I set ``echo = FALSE`` for the r chunk in the ``.Rmd`` file. You'll have to look at the [source file](https://github.com/tomstafford/psy6422/blob/master/070-rmarkdown.Rmd) to see this, because - obviously! - in the webpage you don't see any code.
+
+### Options for code chunks
+
+Other [options for code chunks include](https://rmarkdown.rstudio.com/lesson-3.html)
+
+  * `include = FALSE` makes the code and results invisible, but the code still runs
+  * `message = FALSE` hides messages generated by the code
+  * `warning = FALSE` hides error messages and warnings (normally you want to pay attention to these, but they can make your final document untidy)
+  * `fig.cap = "..."` puts a caption on any visualisation output
+  
+### Include r in inline text
+
+You can also put single values in ongoing text using Rmarkdown
+
+Imagine you have some data
+
+```{r}
+data = c(10,42,2,2,34,63)
+```
+
+You can then refer to it in the text. Like this: the mean of the data is `r mean(data)`
+
+If you are viewing on the webpage you see the answer, but the file contains an instruction to calculate ``mean(data)``.
+
+Neat, eh?
+
+
+## Conclusion
+
+Rmarkdown documents give you a powerful way to combine text, code and code outputs in one file. That means you don't lose track of how graphs are generated, or statistics are calculated. With RMarkdown your workflow is reproducible, so if you add new data you can update the final report with just one click. RMarkdown documents also encourage you to document fully and explain your code. You can export to different formats depending on your audience, all from the same file.
+
+## Exercises
+
+* Create a new RMarkdown document
+* Describe in text the data you are thinking of using for your assignment. 
+  * Use some highlights: bold, italics
+  * Use headings
+* Include an R chunk importing the data and showing the first few lines of the data (hint: use the `head` command)
+* Include some more text describing the key variables you are interested in
+* Show a graph of something (either a scatterplot, or a histogram perhaps)
+* Include some inline text, reporting a mean value (as my last example above)
+* Make PDF and a Word file by clicking "knit"
+* Send the .Rmd file *and the PDF to me via email
+
+
+:::: {.info}
+Using RMarkdown is essential on this course. These exercises help you check you have mastered this material, as well as giving another opportunity for Tom to feed back on your project
+::::
+
+## Advanced
+
+Set the [html output options](https://bookdown.org/yihui/rmarkdown/html-document.html) in the YAML to make your output look nicer
+
+```yaml
+---
+title: "Habits"
+output:
+  df_print: 'paged'
+  code_folding: 'show'
+---
+```
+
+
+## Checklist
+
+* Create RMarkdown documents
+* Knit to HTML, Word and/or PDF
+* Incorporate text formatting like bold, italics, headings and hyperlinks
+* Incorporate inline R code (e.g. to report variable values)
+* Incorporate code chunks
+  * understand that these can be defined with names and/or options 
+  * use the echo=FALSE to *not* show code chunks
+* Incorporate graphical output
+
+## Resources
+
+* [RStudio intro to Rmarkdown](https://rmarkdown.rstudio.com/)
+* Xie et al (2021): [R Markdown: The Definitive Guide](https://bookdown.org/yihui/rmarkdown/)
+* [RStudio RMarkdown cheatsheet](https://www.rstudio.com/wp-content/uploads/2015/02/rmarkdown-cheatsheet.pdf)
+* [Getting started in R markdown](https://www.r-bloggers.com/2020/02/getting-started-in-r-markdown-2/)
+* Helps with learning Markdown conventions: [markdownlivepreview.com](https://markdownlivepreview.com/)
+* Making Word documents: [Happy collaboration with Rmd to docx](https://rmarkdown.rstudio.com/articles_docx.html)
+* Install this to make PDFs work: [Getting MiKTeX](https://miktex.org/download)
+* You can write beautifully APA formatted manuscripts in RMarkdown: [A minimal example of APA manuscript preparation, integrating text & analysis code, using Rmarkdown and papaja](https://github.com/tomstafford/rmarkdown_apa)
