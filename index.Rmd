@@ -3,7 +3,7 @@ title: "Engagement and Attendance Survey Report"
 author: "Chris Martin"
 date: "`r Sys.Date()`"
 output:
-  pdf_document: 
+  html_document: 
     toc: true
     theme: readable
     code_folding: hide
@@ -20,8 +20,8 @@ This report contains preliminary analysis only. A full write up is in progress a
 
 ## Prepare environment and load data
 
-Make the the qualtRics, likert and tidyverse libraries available and then load the data.
-Data is combined across the Level 1 and Level 2 surveys into a single data frame.
+Make the the qualtRics, likert and tidyverse libraries available and then load the data. Data is combined across the Level 1 and Level 2 surveys into a single data frame.
+
 ```{r, message=FALSE}
 library('qualtRics')
 library('likert')
@@ -35,11 +35,11 @@ Data <- rbind(L1data, L2data) #combine data
 
 ## Screen and clean data
 
-Order data by Qualtrics 'progress' measure and inspect rows (rows 20-26 reveal relevant cut-off point, as below).
+Order dataframe by Qualtrics 'progress' value (from low to high) measure and inspect rows. Rows 20-26 are displayed below as they reveal the cut-off point between where respondents fail to complete the survey to the end, and those that do (where 'progress' is 97% or above).
 
 ```{r}
 Data <- arrange(Data, Progress)
-y<-data.frame(lapply(Data[c(20:26),c(70:80)], substr, 1, 3))
+y<-data.frame(lapply(Data[c(20:26),c(4, 70:80)], substr, 1, 3))
 y
 ```
 
@@ -54,14 +54,14 @@ Next, show duration data (how long it took respondents to complete the survey).
 
 ```{r}
 ggplot()+
-  geom_boxplot(aes(y=DataComplete$Duration))+
+  geom_boxplot(aes(y=DataComplete$Duration/3600))+
   geom_jitter()+
   scale_x_discrete()+
   geom_boxplot(outlier.shape = NA)+
   ylab("Time to complete survey (hrs)")+xlab("All Respondents")
 ```
 
-Two entries with very long duration: inspection of responses indicates they are complete and fine to include.
+This reveals Two entries with very long duration to complete: inspection of the responses indicates no reason to exclude (likely that respondents partially completed the survey and come back to it on a later date).
 
 ## Demographics and other features
 
@@ -72,7 +72,7 @@ ggplot(data.frame(table(DataComplete$Level)), aes(x="", y=Freq, fill=Var1))+
   geom_bar(stat="identity", width=1) +
   geom_text(aes(label = round(100*Freq/sum(Freq), digits=1)), position = position_stack(vjust = 0.5)) +
   coord_polar("y", start=0) +
-  labs(title = "Level of Study", fill = "Level")+
+  labs(title = "What is your level of study?", fill = "Level")+
   theme_void()+
   theme(plot.title = element_text(hjust = 0.5))
 ```
@@ -91,12 +91,12 @@ ggplot(data.frame(table(DataComplete$Language)), aes(x="", y=Freq, fill=Var1))+
 
 > Basic piechart for ethnicity
 
-``` {r}
+```{r}
 ggplot(data.frame(table(DataComplete$Ethnicity)), aes(x="", y=Freq, fill=Var1))+
   geom_bar(stat="identity", width=1) +
   geom_text(aes(label = round(100*Freq/sum(Freq), digits=1)), position = position_stack(vjust = 0.5)) +
   coord_polar("y", start=0) +
-  labs(title = "Ethnicity", fill = "Response")+
+  labs(title = "What is your ethnicity?", fill = "Response")+
   theme_void()+
   theme(plot.title = element_text(hjust = 0.5))
 ```
@@ -108,10 +108,14 @@ ggplot(data.frame(table(DataComplete$Gender)), aes(x="", y=Freq, fill=Var1))+
   geom_bar(stat="identity", width=1) +
   geom_text(aes(label = round(100*Freq/sum(Freq), digits=1)), position = position_stack(vjust = 0.5)) +
   coord_polar("y", start=0) +
-  labs(title = "Gender Identity", fill = "Response")+
+  labs(title = "What is your gender identity?", fill = "Response")+
   theme_void()+
   theme(plot.title = element_text(hjust = 0.5))
 ```
+
+> Basic piechart for disabilities
+
+**Cannot plot this yet. In the survey we allowed multiple response selections and these need to be parsed in the dataframe to enable clearer plotting.**
 
 > Basic piechart for traveltime
 
@@ -120,7 +124,7 @@ ggplot(data.frame(table(DataComplete$Travel_Time)), aes(x="", y=Freq, fill=Var1)
   geom_bar(stat="identity", width=1) +
   geom_text(aes(label = round(100*Freq/sum(Freq), digits=1)), position = position_stack(vjust = 0.5)) +
   coord_polar("y", start=0) +
-  labs(title = "Travel Time to University", fill = "Response")+
+  labs(title = "What is your travel time to university?", fill = "Response")+
   theme_void()+
   theme(plot.title = element_text(hjust = 0.5))
 ```
@@ -132,12 +136,40 @@ ggplot(data.frame(table(DataComplete$Caring)), aes(x="", y=Freq, fill=Var1))+
   geom_bar(stat="identity", width=1) +
   geom_text(aes(label = round(100*Freq/sum(Freq), digits=1)), position = position_stack(vjust = 0.5)) +
   coord_polar("y", start=0) +
-  labs(title = "Caring Responsibilities", fill = "Response")+
+  labs(title = "Do you have any caring responsibilities?", fill = "Response")+
   theme_void()+
   theme(plot.title = element_text(hjust = 0.5))
 ```
 
-## Plot Likert data for engagement perceptions
+*Note that one individual selected both "No caring responsibilities" and "Prefer not to say".*
+
+> Basic piechart for international/home student status
+
+```{r}
+ggplot(data.frame(table(DataComplete$International)), aes(x="", y=Freq, fill=Var1))+
+  geom_bar(stat="identity", width=1) +
+  geom_text(aes(label = round(100*Freq/sum(Freq), digits=1)), position = position_stack(vjust = 0.5)) +
+  coord_polar("y", start=0) +
+  labs(title = "Are you an international student?", fill = "Response")+
+  theme_void()+
+  theme(plot.title = element_text(hjust = 0.5))
+```
+
+> Basic piechart for mature student status
+
+```{r}
+ggplot(data.frame(table(DataComplete$Mature)), aes(x="", y=Freq, fill=Var1))+
+  geom_bar(stat="identity", width=1) +
+  geom_text(aes(label = round(100*Freq/sum(Freq), digits=1)), position = position_stack(vjust = 0.5)) +
+  coord_polar("y", start=0) +
+  labs(title = "What was your age when you started your degree course?", fill = "Response")+
+  theme_void()+
+  theme(plot.title = element_text(hjust = 0.5))
+```
+
+## Likert data for engagement perceptions
+
+Show responses with items ordered from highest % of agreement to lowest % of agreement.
 
 ```{r, out.width="150%"}
 
@@ -156,7 +188,9 @@ plot(likert(DataComplete[c(22:46)]), legend.position="right", text.size=2) +
 
 ```
 
-## Plot Likert data for enablers/barriers
+## Likert data for enabler/barrier items regarding in-person attendance
+
+Show responses with items ordered from highest % of agreement to lowest % of agreement.
 
 ```{r, out.width="150%"}
 
@@ -171,8 +205,4 @@ plot(likert(DataComplete[c(60:85)]), legend.position="right", text.size=2) +
   theme(panel.grid = element_line(color = "gray90"))
 ```
 
-
-
-
-
-
+**To consider: recode the above items to enable a plot organised on continuum of barrier-enabler. For example, the 7th item above ("prefer to study on my own") would be reverse coded.**
