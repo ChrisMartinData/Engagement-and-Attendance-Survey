@@ -72,7 +72,7 @@ ggplot(data.frame(table(DataComplete$Level)), aes(x="", y=Freq, fill=Var1))+
   geom_bar(stat="identity", width=1) +
   geom_text(aes(label = round(100*Freq/sum(Freq), digits=1)), position = position_stack(vjust = 0.5)) +
   coord_polar("y", start=0) +
-  labs(title = "What is your level of study?", fill = "Level")+
+  labs(title = "What is your level of study?", fill = "Response")+
   theme_void()+
   theme(plot.title = element_text(hjust = 0.5))
 ```
@@ -117,7 +117,7 @@ ggplot(data.frame(table(DataComplete$Gender)), aes(x="", y=Freq, fill=Var1))+
 
 **Cannot plot this yet. In the survey we allowed multiple response selections and these need to be parsed in the dataframe to enable clearer plotting.**
 
-> Basic piechart for traveltime
+> Basic piechart for travel time
 
 ```{r}
 ggplot(data.frame(table(DataComplete$Travel_Time)), aes(x="", y=Freq, fill=Var1))+
